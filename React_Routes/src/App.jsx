@@ -1,47 +1,53 @@
-import { Routes, Route, Link } from "react-router-dom";
+import {Routes, Route, Link, Navigate, NavLink} from "react-router-dom";
 import Home from "./Components/Home";
-import About from "./Components/About";
 import NewsLetter from "./Components/NewLetter";
-import Contact from "./Components/Contact";
 import Book from "./Components/Book";
 import BookList from "./Components/BookList";
+import ErrorPage from "./Components/ErrorPage.jsx";
+import BookLayout from "./BookLayout/BookLayout.jsx";
 
 export default () => {
-  return (
-    <>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/book">Book</Link>
-          </li>
-          <li>
-            <Link to="/booklist">BookList</Link>
-          </li>
-          <li>
-            <Link to="/newsletter">NewsLetter</Link>
-          </li>
-          <li>
-            <Link to="contact">Contact</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-        </ul>
-      </nav>
+    return (
+        <>
+            {/*<Routes location="/books">*/}
+            {/*    <Route path="/books" element={<h1>Nested Routes</h1>}/>*/}
+            {/*</Routes>*/}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/booklist" element={<BookList />} />
 
-        <Route path="/book" element={<Book />} />
+            <nav>
+                <ul>
+                    <li>
+                        <NavLink style={({isActive})=>{
+                           return isActive ? {color:"red"} :  {}
+                        }} to="/">Home</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to="/books">Books</NavLink>
+                    </li>
+                </ul>
+            </nav>
 
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/newsletter" element={<NewsLetter />} />
-      </Routes>
-    </>
-  );
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+
+                {/*Nested routes With same Path*/}
+                <Route path="/books" element={<BookLayout/>}>
+                    <Route index element={<BookList/>}/>
+                    <Route path=":id" element={<Book/>}/>
+                    <Route path="new" element={<NewsLetter/>}/>
+                </Route>
+
+
+                {/*Single Page Routes with same Path*/}
+                {/*<Route path="/books" element={<BookList/>}/>*/}
+                {/*<Route path="/books/:id" element={<Book/>}/>*/}
+                {/*<Route path="/books/newsLetter" element={<NewsLetter />} />*/}
+
+                <Route path="*" element={<ErrorPage/>}/>
+
+                {/*<Route path="/contact" element={<Contact/>}/>*/}
+                {/*<Route path="/about" element={<About/>}/>*/}
+            </Routes>
+        </>
+    );
 };
